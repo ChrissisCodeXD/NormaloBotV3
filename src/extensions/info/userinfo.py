@@ -10,6 +10,7 @@ userinfo_plugin.add_checks(
 )
 
 
+
 @userinfo_plugin.command()
 @lightbulb.check_exempt(src.helper.mod_check)
 @lightbulb.option("user", "User to delete messages from", hikari.Member, required=False)
