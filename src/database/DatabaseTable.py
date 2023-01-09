@@ -1,6 +1,7 @@
 import sqlalchemy.engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, BIGINT, BOOLEAN
+from sqlalchemy.dialects.mysql import LONGTEXT
 import logging
 
 logger = logging.getLogger(__name__)
@@ -44,6 +45,15 @@ class GuildsTable(DatabaseTable):
     guild_icon = Column(String(200))
     guild_owner_id = Column(BIGINT)
     guild_member_count = Column(BIGINT)
+
+class PermissionsTable(DatabaseTable):
+    __tablename__ = "permissions"
+
+    id = Column(Integer, primary_key=True)
+    guild_id = Column(BIGINT)
+    command = Column(String(200))
+    type = Column(String(200))
+    permission = Column(LONGTEXT)
 
 
 def create_all(engine: sqlalchemy.engine.Engine):
