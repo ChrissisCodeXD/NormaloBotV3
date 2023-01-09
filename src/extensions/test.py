@@ -15,11 +15,12 @@ ban_plugin.add_checks(
 @ban_plugin.listener(hikari.StartedEvent)
 async def foo(event: hikari.StartedEvent):
     db: src.database.PoolManager = event.app.db
-    #await db.create()
+    # await db.create()
     pass
-    #print("super")
-    #db = await event.app.db.getDBHandler("prefixes")
-    #await db.select()
+    # print("super")
+    # db = await event.app.db.getDBHandler("prefixes")
+    # await db.select()
+
 
 def load(bot):
     bot.add_plugin(ban_plugin)
