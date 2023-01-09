@@ -85,16 +85,7 @@ class NormaloBot(lightbulb.BotApp):
         self.db = src.database.PoolManager()
         self.env = src.helper.Env()
         #self._prefix__get_class = Prefixes(self)
-        self._extensions = [p.stem for p in Path("./extensions/").glob("*.py")]
-        self._extensions.extend([f"moderation.{p.stem}" for p in Path("./extensions/moderation/").glob("*.py")])
-        self._extensions.extend([f"events.{p.stem}" for p in Path("./extensions/events/").glob("*.py")])
-        self._extensions.extend([f"settings.{p.stem}" for p in Path("./extensions/settings/").glob("*.py")])
-        self._extensions.extend([f"test.{p.stem}" for p in Path("./extensions/test/").glob("*.py")])
-        self._extensions.extend([f"security.{p.stem}" for p in Path("./extensions/security/").glob("*.py")])
-        self._extensions.extend([f"fun.{p.stem}" for p in Path("./extensions/fun/").glob("*.py")])
-        self._extensions.extend(
-            [f"server_managment.{p.stem}" for p in Path("./extensions/server_managment/").glob("*.py")])
-
+        self._extensions = self.search_all_extensions()
         self.token = token = self.env.get('TOKEN1')
         if src.__beta__:
 
@@ -148,6 +139,29 @@ class NormaloBot(lightbulb.BotApp):
                 type=hikari.ActivityType.COMPETING,
             )
         )
+
+
+    def search_all_extensions(self, startpath: str = "./extensions/") -> list:
+        extensions = []
+        for p in Path(startpath).iterdir():
+            p: Path
+            if p.is_file() and p.suffix == ".py":
+                extension_name = ""
+                for part in p.parts:
+                    if part == "extensions":
+                        continue
+                    if part == p.name:
+                        extension_name += part[:-3]
+                        continue
+                    extension_name += f"{part}."
+                extensions.append(extension_name)
+            elif p.is_dir():
+                extensions.extend(self.search_all_extensions(str(p)))
+        return extensions
+
+
+
+
 
     async def on_starting(self: _BotT, event: hikari.StartingEvent) -> None:
 
