@@ -10,7 +10,7 @@ userinfo_plugin.add_checks(
 
 
 @userinfo_plugin.command()
-@lightbulb.check_exempt(src.helper.mod_check)
+@lightbulb.check_exempt(src.helper.perm_check)
 @lightbulb.option("user", "User to delete messages from", hikari.Member, required=False)
 @lightbulb.command("userinfo", "Clears the Current Channel")
 @lightbulb.implements(lightbulb.PrefixCommand, lightbulb.SlashCommand)

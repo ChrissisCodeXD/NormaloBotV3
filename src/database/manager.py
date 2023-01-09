@@ -135,8 +135,12 @@ class PoolManager:
 
         self.pool = pool
 
-    async def getDBHandler(self, tablename: str) -> DB:
+    async def getDBHandler(self, *args) -> DB:
         if not self.pool:
             await self.create()
-
-        return DB(tablename, self.pool)
+        if len(args) == 1:
+            return DB(args[0], self.pool)
+        elif len(args) > 1:
+            return DB(", ".join(args), self.pool)
+        else:
+            raise ValueError("No table name given")
