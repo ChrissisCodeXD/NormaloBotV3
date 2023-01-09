@@ -14,36 +14,56 @@ class DB:
         self.env: src.helper.Env = src.helper.Env()
         self.pool: aiomysql.Pool = pool
 
-    async def select(self, *args, **kwargs) -> list:
-        attribute = kwargs.get("attribute", "*")
+    async def select(self, attribute: str = "*", amount: int = None, **kwargs) -> list:
+        """
+        function to select a row in a table
+        :param attribute: attribute to select, e.g. name or * or COUNT(*)
+        :param amount: amount of rows to select (default: None -> all rows)
+        :param kwargs: list of strings with the conditions, e.g. ["id = 1", "name = 'test'"]
+        :return:
+        """
         query = f"SELECT {attribute} FROM {self.__table}"
-        for _, condition in enumerate(args):
-            query += f" {condition}"
-            if len(args) - 1 != _:
+        for _, ites in enumerate(kwargs):
+            if 0 == _:
+                query += " WHERE"
+            query += f" {ites} = %s"
+            if len(kwargs) - 1 != _:
                 query += " AND"
         query += ";"
         pool: aiomysql.Pool = self.pool
 
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute(query)
-                if kwargs.get("amount"):
-                    r = await cur.fetchmany(kwargs.get("amount"))
+                await cur.execute(query,list(kwargs.values()))
+                if amount:
+                    r = await cur.fetchmany(amount)
                 else:
                     r = await cur.fetchall()
         return r
 
     async def insert(self, **kwargs) -> None:
-        query = f"INSERT INTO {self.__table} ({', '.join([i for i in kwargs])}) VALUES ({', '.join([kwargs[i] for i in kwargs])});"
+        """
+        function to insert a row in a table
+        :param kwargs: values to insert, e.g. name = "test" be sure that you give all values that are required
+        :return:
+        """
+        query = f"INSERT INTO {self.__table} ({', '.join([str(i) for i in kwargs])}) VALUES ({', '.join(['%s' for i in kwargs])});"
         pool: aiomysql.Pool = self.pool
-
+        #print(query)
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute(query)
-                conn.commit()
+                #print(list(kwargs.values()))
+                await cur.execute(query,list(kwargs.values()))
+                await conn.commit()
 
-    async def update(self, where_clause: list = [], **kwargs) -> None:
-        query = f"UPDATE {self.__table} SET {', '.join([f'{i} = {kwargs[i]}' for i in kwargs])}"
+    async def update(self, where_clause: [str] = [], **kwargs) -> None:
+        """
+        function to update a row in a table
+        :param where_clause: list of strings with the conditions, e.g. ["id = 1", "name = 'test'"]
+        :param kwargs: values to update, e.g. name = "test"
+        :return:
+        """
+        query = f"UPDATE {self.__table} SET {', '.join([f'{i} = %s' for i in kwargs])}"
         if len(where_clause):
             query += " WHERE"
         for _, i in enumerate(where_clause):
@@ -51,12 +71,12 @@ class DB:
             if len(where_clause) - 1 != _:
                 query += " AND"
         query += ";"
-
+        print(query)
         pool: aiomysql.Pool = self.pool
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute(query)
-                conn.commit()
+                await cur.execute(query, list(kwargs.values()))
+                await conn.commit()
 
 
 class PoolManager:
@@ -105,7 +125,6 @@ class PoolManager:
             pool = None
             self.__first_init = False
         if self.__first_init:
-            print("first init")
             eng = self.get_engine()
             src.database.create_all(eng)
         pool = await aiomysql.create_pool(host=self.host, port=3306,
