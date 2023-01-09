@@ -1,6 +1,9 @@
 import sqlalchemy.engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, BIGINT
+from sqlalchemy import Column, Integer, String, BIGINT, BOOLEAN
+import logging
+
+logger = logging.getLogger(__name__)
 Base = declarative_base()
 
 
@@ -18,6 +21,27 @@ class PrefixesTable(DatabaseTable):
     guild_id = Column(BIGINT)
     prefix = Column(String(20))
 
+class UsersTable(DatabaseTable):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(BIGINT)
+    user_name = Column(String(200))
+    user_discriminator = Column(String(200))
+    user_avatar = Column(String(200))
+    user_bot = Column(BOOLEAN)
+
+class GuildsTable(DatabaseTable):
+    __tablename__ = "guilds"
+
+    id = Column(Integer, primary_key=True)
+    guild_id = Column(BIGINT)
+    guild_name = Column(String(200))
+    guild_icon = Column(String(200))
+    guild_owner_id = Column(BIGINT)
+    guild_member_count = Column(BIGINT)
+
+
 def create_all(engine: sqlalchemy.engine.Engine):
-    print("Create all")
+    logger.info("Created all tables")
     Base.metadata.create_all(bind=engine)
