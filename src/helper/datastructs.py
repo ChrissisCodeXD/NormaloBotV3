@@ -24,7 +24,9 @@ class UserEntry(Hashable):
     user_name: str
     user_discriminator: str
     user_avatar: str
+    user_banner: str
     user_bot: bool
+
 
 
 class GuildEntry(Hashable):

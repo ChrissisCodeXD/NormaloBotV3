@@ -48,7 +48,8 @@ async def changed_user(user_entry: src.helper.UserEntry) -> bool:
     user_entry_database.user_name = user_database[2]
     user_entry_database.user_discriminator = user_database[3]
     user_entry_database.user_avatar = user_database[4]
-    user_entry_database.user_bot = False if user_database[5] == 0 else True
+    user_entry_database.user_banner = user_database[5]
+    user_entry_database.user_bot = False if user_database[6] == 0 else True
     toret = user_entry_database != user_entry
 
     return toret
@@ -102,6 +103,7 @@ async def store_data():
             user.user_name = str(member.username)
             user.user_discriminator = str(member.discriminator)
             user.user_avatar = str(member.make_avatar_url())
+            user.user_banner = str(member.make_banner_url())
             user.user_bot = bool(member.is_bot)
             changed = await changed_user(user)
             if changed:
@@ -114,6 +116,7 @@ async def store_data():
                         user_name=user.user_name,
                         user_discriminator=user.user_discriminator,
                         user_avatar=user.user_avatar,
+                        user_banner=user.user_banner,
                         user_bot=user.user_bot
                     )
                 else:
@@ -122,6 +125,7 @@ async def store_data():
                         user_name=user.user_name,
                         user_discriminator=user.user_discriminator,
                         user_avatar=user.user_avatar,
+                        user_banner=user.user_banner,
                         user_bot=user.user_bot
                     )
 

@@ -29,6 +29,7 @@ class UsersTable(DatabaseTable):
     user_name = Column(String(200))
     user_discriminator = Column(String(200))
     user_avatar = Column(String(200))
+    user_banner = Column(String(200))
     user_bot = Column(BOOLEAN)
 
 class GuildsTable(DatabaseTable):
