@@ -18,7 +18,6 @@ class Hashable:
         )
 
 
-
 class UserEntry(Hashable):
     user_id: int
     user_name: str
@@ -26,7 +25,6 @@ class UserEntry(Hashable):
     user_avatar: str
     user_banner: str
     user_bot: bool
-
 
 
 class GuildEntry(Hashable):

@@ -13,10 +13,12 @@ async def guild_already_exists(guild_entry: src.helper.GuildEntry):
     guild_database = (await db.select(guild_id=guild_entry.guild_id))
     return len(guild_database) > 0
 
+
 async def user_already_exists(user_entry: src.helper.UserEntry):
     db: src.database.DB = await datastorage_plugin.app.db.getDBHandler("users")
     user_database = (await db.select(user_id=user_entry.user_id))
     return len(user_database) > 0
+
 
 @cached(ttl_cache)
 async def changed_guild(guild_entry: src.helper.GuildEntry) -> bool:
@@ -38,7 +40,7 @@ async def changed_guild(guild_entry: src.helper.GuildEntry) -> bool:
 @cached(ttl_cache)
 async def changed_user(user_entry: src.helper.UserEntry) -> bool:
     db: src.database.DB = await datastorage_plugin.app.db.getDBHandler("users")
-    user_database = (await db.select(user_id = user_entry.user_id))
+    user_database = (await db.select(user_id=user_entry.user_id))
     if len(user_database) == 0:
         return True
     user_database = user_database[0]
@@ -53,6 +55,7 @@ async def changed_user(user_entry: src.helper.UserEntry) -> bool:
     toret = user_entry_database != user_entry
 
     return toret
+
 
 @tasks.task(m=5, auto_start=True)
 async def store_data():
@@ -128,8 +131,6 @@ async def store_data():
                         user_banner=user.user_banner,
                         user_bot=user.user_bot
                     )
-
-
 
 
 def load(bot):

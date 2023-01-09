@@ -14,12 +14,14 @@ class DatabaseTable(Base):
         table = self.__table__
         return self.__table__.exists(bind=self.__table__.metadata.bind)
 
+
 class PrefixesTable(DatabaseTable):
     __tablename__ = "prefixes"
 
     id = Column(Integer, primary_key=True)
     guild_id = Column(BIGINT)
     prefix = Column(String(20))
+
 
 class UsersTable(DatabaseTable):
     __tablename__ = "users"
@@ -31,6 +33,7 @@ class UsersTable(DatabaseTable):
     user_avatar = Column(String(200))
     user_banner = Column(String(200))
     user_bot = Column(BOOLEAN)
+
 
 class GuildsTable(DatabaseTable):
     __tablename__ = "guilds"

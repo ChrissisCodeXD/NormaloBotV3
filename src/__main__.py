@@ -4,6 +4,7 @@ from main import NormaloBot
 
 if os.name != "nt":
     import uvloop
+
     uvloop.install()
 
 if __name__ == "__main__":

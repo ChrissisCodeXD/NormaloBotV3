@@ -1,4 +1,3 @@
-
 class CouldNotFindEnv(Exception):
     pass
 

@@ -12,8 +12,10 @@ class Prefixes:
         self.bot = bot
         self.prefixes = {}
         self.conn = mysql.connector.connect(host=bot.env.get('database_host'), port=3306,
-                                     user=bot.env.get('database_user'), password=bot.env.get('database_password'),
-                                     db='s67_NormaloBotTest',#ssl_ca="D:\\Benutzer\\Dokumente\\python\\normaloBotV3\\src\\data\\cacert-2022-10-11.pem"
+                                            user=bot.env.get('database_user'),
+                                            password=bot.env.get('database_password'),
+                                            db='s67_NormaloBotTest',
+                                            # ssl_ca="D:\\Benutzer\\Dokumente\\python\\normaloBotV3\\src\\data\\cacert-2022-10-11.pem"
                                             )
         self.prefixes = self.get_all_prefixes()
 
@@ -33,7 +35,7 @@ class Prefixes:
             cursor.execute(stmt, list(kwargs.values()))
             conn.commit()
 
-    def update(self,conn, table, where_clause, **kwargs):
+    def update(self, conn, table, where_clause, **kwargs):
         # Build the SET clause of the UPDATE statement
         set_clause = ', '.join([f"{key} = %s" for key in kwargs.keys()])
         stmt = f"UPDATE {table} SET {set_clause} WHERE {where_clause}"
@@ -84,7 +86,7 @@ class NormaloBot(lightbulb.BotApp):
         self.log = log
         self.db = src.database.PoolManager()
         self.env = src.helper.Env()
-        #self._prefix__get_class = Prefixes(self)
+        # self._prefix__get_class = Prefixes(self)
         self._extensions = self.search_all_extensions()
         self.token = token = self.env.get('TOKEN1')
         if src.__beta__:
@@ -92,7 +94,7 @@ class NormaloBot(lightbulb.BotApp):
             super().__init__(
                 token=token,
                 intents=hikari.Intents.ALL,
-                prefix=lightbulb.app.when_mentioned_or("!"),#self._prefix__get_class.get_prefixes
+                prefix=lightbulb.app.when_mentioned_or("!"),  # self._prefix__get_class.get_prefixes
                 default_enabled_guilds=src.__guilds__,
                 help_class=src.helper.HelpCommand,
                 help_slash_command=True,
@@ -111,7 +113,7 @@ class NormaloBot(lightbulb.BotApp):
             super().__init__(
                 token=token,
                 intents=hikari.Intents.ALL,
-                prefix=lightbulb.app.when_mentioned_or("!"),#self._prefix__get_class.get_prefixes
+                prefix=lightbulb.app.when_mentioned_or("!"),  # self._prefix__get_class.get_prefixes
                 ignore_bots=True,
                 help_class=src.helper.HelpCommand,
                 help_slash_command=True,
@@ -140,7 +142,6 @@ class NormaloBot(lightbulb.BotApp):
             )
         )
 
-
     def search_all_extensions(self, startpath: str = "./extensions/") -> list:
         extensions = []
         for p in Path(startpath).iterdir():
@@ -159,10 +160,6 @@ class NormaloBot(lightbulb.BotApp):
                 extensions.extend(self.search_all_extensions(str(p)))
         return extensions
 
-
-
-
-
     async def on_starting(self: _BotT, event: hikari.StartingEvent) -> None:
 
         for ext in self._extensions:
@@ -176,9 +173,8 @@ class NormaloBot(lightbulb.BotApp):
             event_manager=self.event_manager,
             address=self.env.get("REDIS_ADDRESS"),
             password=self.env.get("REDIS_PASSWORD"),
-            )
+        )
         await cache.open()
-
 
     async def on_started(self: _BotT, event: lightbulb.LightbulbStartedEvent) -> None:
         """builder = (

@@ -6,7 +6,6 @@ import src
 from sqlalchemy import create_engine
 
 
-
 class DB:
 
     def __init__(self, tablename: str, pool: aiomysql.Pool):
@@ -34,7 +33,7 @@ class DB:
 
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute(query,list(kwargs.values()))
+                await cur.execute(query, list(kwargs.values()))
                 if amount:
                     r = await cur.fetchmany(amount)
                 else:
@@ -49,11 +48,11 @@ class DB:
         """
         query = f"INSERT INTO {self.__table} ({', '.join([str(i) for i in kwargs])}) VALUES ({', '.join(['%s' for i in kwargs])});"
         pool: aiomysql.Pool = self.pool
-        #print(query)
+        # print(query)
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
-                #print(list(kwargs.values()))
-                await cur.execute(query,list(kwargs.values()))
+                # print(list(kwargs.values()))
+                await cur.execute(query, list(kwargs.values()))
                 await conn.commit()
 
     async def update(self, where_clause: [str] = [], **kwargs) -> None:
@@ -82,8 +81,8 @@ class DB:
 class PoolManager:
 
     def __init__(self):
-        #.ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-        #self.ctx.load_verify_locations(
+        # .ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+        # self.ctx.load_verify_locations(
         #    cafile="D:\\Benutzer\\Dokumente\\python\\normaloBotV3\\src\\data\\cacert-2022-10-11.pem")
         self.env: src.helper.Env = src.helper.Env()
         self.host = self.env.get("database_host")
@@ -108,7 +107,7 @@ class PoolManager:
             self.pool.terminate()
 
     def __create_engine(self):
-        database_url = f"mysql+mysqlconnector://{self.user}:{self.password}@{self.host}:3306/{self.databasename}"#?ssl_ca=D:\\Benutzer\\Dokumente\\python\\normaloBotV3\\src\\data\\cacert-2022-10-11.pem"
+        database_url = f"mysql+mysqlconnector://{self.user}:{self.password}@{self.host}:3306/{self.databasename}"  # ?ssl_ca=D:\\Benutzer\\Dokumente\\python\\normaloBotV3\\src\\data\\cacert-2022-10-11.pem"
         self.engine = create_engine(database_url)
 
     def get_engine(self):
@@ -131,7 +130,7 @@ class PoolManager:
                                           user=self.user,
                                           password=self.password,
                                           db=self.databasename, loop=loop,
-                                          #ssl=self.ctx
+                                          # ssl=self.ctx
                                           )
 
         self.pool = pool
