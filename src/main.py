@@ -1,6 +1,7 @@
 import logging
 import src
 from src.imports import *
+from src.helper import PermissionCache
 
 log = logging.getLogger(__name__)
 _BotT = t.TypeVar("_BotT", bound="Bot")
@@ -86,9 +87,10 @@ class NormaloBot(lightbulb.BotApp):
         self.log = log
         self.db = src.database.PoolManager()
         self.env = src.helper.Env()
-        # self._prefix__get_class = Prefixes(self)
+        self._prefix__get_class = Prefixes(self)
         self._extensions = self.search_all_extensions()
         self.token = token = self.env.get('TOKEN1')
+        self.perm_cache = PermissionCache(1000, self.db)
         if src.__beta__:
 
             super().__init__(
