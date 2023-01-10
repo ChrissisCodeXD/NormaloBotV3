@@ -102,6 +102,7 @@ class NormaloBot(lightbulb.BotApp):
                 help_slash_command=True,
                 ignore_bots=True,
                 case_insensitive_prefix_commands=True,
+                owner_ids=[589898942527963157],
                 logs={
                     "version": 1,
                     "incremental": True,
@@ -120,6 +121,7 @@ class NormaloBot(lightbulb.BotApp):
                 help_class=src.helper.HelpCommand,
                 help_slash_command=True,
                 case_insensitive_prefix_commands=True,
+                owner_ids=[589898942527963157],
                 logs={
                     "version": 1,
                     "incremental": True,

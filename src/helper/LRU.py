@@ -79,7 +79,7 @@ class PermissionCache(LruCache):
         db: src.database.DB = await self.__pool.getDBHandler("permissions")
         ret = await db.select(guild_id=guild_id, command=command)
         if len(ret) > 0:
-            await db.update(f'guild_id = {guild_id}', f'command = "{command}"', type=permission_type,
+            await db.update([f'guild_id = {guild_id}', f'command = "{command}"'], type=permission_type,
                             permission=permission)
         else:
             await db.insert(guild_id=guild_id, command=command, type=permission_type, permission=permission)

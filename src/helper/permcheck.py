@@ -4,6 +4,8 @@ from src.imports import *
 
 
 async def perm_check(ctx: lightbulb.Context):
+    if ctx.author.id in ctx.app.owner_ids:
+        return True
     perm: dict = await ctx.app.perm_cache.get_permission(ctx.guild_id, ctx.command.name)
     if not perm:
         if ctx.command.name == "permission_settings":
@@ -14,6 +16,12 @@ async def perm_check(ctx: lightbulb.Context):
             )
             if ctx.author.id == ctx.get_guild().owner_id:
                 return True
+        else:
+            await ctx.app.perm_cache.insert_permission(
+                guild_id=ctx.guild_id,
+                command=ctx.command.name,
+                permission_type="default"
+            )
         return False
     match perm[0]:
         case "roles":
@@ -26,9 +34,7 @@ async def perm_check(ctx: lightbulb.Context):
             if (ctx.get_channel().permissions_for(ctx.member) & permissions) == permissions:
                 return True
         case "only_owner":
-            print("du hurensohn")
             if ctx.author.id == ctx.get_guild().owner_id:
-                print("du hurensohn")
                 return True
         case "everyone":
             return True

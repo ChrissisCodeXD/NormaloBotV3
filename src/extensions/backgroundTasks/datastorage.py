@@ -64,7 +64,6 @@ async def store_data():
     db_guild: src.database.DB = await bot.db.getDBHandler("guilds")
 
     guilds = bot.rest.fetch_my_guilds()
-    print(".")
     async for guild in guilds:
         guild: hikari.RESTGuild = await guild.fetch_self()
         if guild is None:
