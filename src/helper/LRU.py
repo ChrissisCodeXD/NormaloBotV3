@@ -72,9 +72,15 @@ class PermissionCache(LruCache):
             super().insert(key, value)
             return value
 
-    async def insert_permission(self, guild_id: int, command: str, permission_type: str, permission: str = "None") -> None:
+    async def insert_permission(self, guild_id: int, command: str, permission_type: str,
+                                permission: str = "None") -> None:
         key = f"{guild_id}:{command}"
         value = (permission_type, permission)
         db: src.database.DB = await self.__pool.getDBHandler("permissions")
-        await db.insert(guild_id=guild_id, command=command, type=permission_type, permission=permission)
+        ret = await db.select(guild_id=guild_id, command=command)
+        if len(ret) > 0:
+            await db.update(f'guild_id = {guild_id}', f'command = "{command}"', type=permission_type,
+                            permission=permission)
+        else:
+            await db.insert(guild_id=guild_id, command=command, type=permission_type, permission=permission)
         super().insert(key, value)
