@@ -6,3 +6,4 @@ from .LRU import PermissionCache, LruCache
 from .get_time import get_time
 from .color import Color, Colour
 from .similar import similar
+from .decorators import parse_options

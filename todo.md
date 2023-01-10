@@ -4,3 +4,5 @@
 - [ ]  settings command autocompletion
 - [ ]  change the structure of the database? remove id and use user/guild id
 - [x]  implement my own lru cache
+- [ ]  double linked list lru cache
+ 
