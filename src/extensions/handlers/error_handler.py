@@ -57,14 +57,15 @@ async def on_error(event):
         return await event.context.respond(
             "You are missing one or more permissions required in order to run this command", delete_after=3)
 
-    err_id = "ajshdjkahdjkahdwads"
+    bot: src.main.NormaloBot = err_plugin.app
+    db: src.database.DB = await bot.db.getDBHandler("errors")
 
-    #err_id = utils.generate_id()
-    #DBErros(event.app.db).add(
-    #    err_id,
-    #    event.context.invoked_with,
-    #    "".join(traceback.format_exception(event.exception))
-    #)
+    err_id = src.helper.generate_id()
+    await db.insert(
+        err_id=err_id,
+        err_cmd=event.context.invoked_with,
+        err_text="".join(traceback.format_exception(event.exception))
+    )
 
     embed = hikari.Embed(
         title=f"Something went wrong. An error report has been created!",
