@@ -4,6 +4,7 @@ import hikari
 import lightbulb
 import mysql.connector
 import typing as t
+from typing import Union, Sequence
 import sake
 from lightbulb.ext import tasks
 from dataclasses import dataclass
