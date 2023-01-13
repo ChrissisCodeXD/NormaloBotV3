@@ -46,6 +46,7 @@ class GuildsTable(DatabaseTable):
     guild_owner_id = Column(BIGINT)
     guild_member_count = Column(BIGINT)
 
+
 class PermissionsTable(DatabaseTable):
     __tablename__ = "permissions"
 
@@ -64,7 +65,6 @@ class ErrorTable(DatabaseTable):
     err_cmd = Column(String(255))
     err_text = Column(LONGTEXT)
     timestamp = Column(TIMESTAMP)
-
 
 
 def create_all(engine: sqlalchemy.engine.Engine):

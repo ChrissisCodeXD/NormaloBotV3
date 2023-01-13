@@ -3,7 +3,6 @@ import lightbulb
 from src.imports import *
 
 
-
 async def perm_check(ctx: lightbulb.Context):
     if ctx.author.id in ctx.app.owner_ids:
         return True
@@ -47,8 +46,8 @@ async def perm_check(ctx: lightbulb.Context):
     return False
 
 
-
-async def perm_check_without_ctx(app ,guild: hikari.Guild ,member: hikari.Member ,command_name: str, channel:hikari.TextableChannel):
+async def perm_check_without_ctx(app, guild: hikari.Guild, member: hikari.Member, command_name: str,
+                                 channel: hikari.TextableChannel):
     if member.id in app.owner_ids:
         return True
     perm: dict = await app.perm_cache.get_permission(guild.guild_id, command_name)

@@ -1,8 +1,7 @@
 from src.imports import *
 import src
+
 err_plugin = lightbulb.Plugin("error_plugin")
-
-
 
 
 @err_plugin.listener(lightbulb.CommandErrorEvent)

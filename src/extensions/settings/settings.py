@@ -88,8 +88,8 @@ async def build_select_roles(bot, perm, guild: hikari.Guild):
             roles.add_to_container()
             rows.append(row)
             row = bot.rest.build_message_action_row()
-            print("select_roles_" + str(round(_/25)))
-            roles: hikari.api.SelectMenuBuilder = row.add_select_menu("select_roles_" + str(round(_/25)))
+            print("select_roles_" + str(round(_ / 25)))
+            roles: hikari.api.SelectMenuBuilder = row.add_select_menu("select_roles_" + str(round(_ / 25)))
             roles.set_placeholder("Select the Roles")
             overall_roles -= 25
             if overall_roles < 25:
@@ -186,8 +186,9 @@ def get_selected_role_ids(msg: hikari.Message):
             to_ret.append([])
             for opt in i.components[0].options:
                 if opt.is_default:
-                    to_ret[_-1].append(opt.value)
+                    to_ret[_ - 1].append(opt.value)
     return to_ret
+
 
 @settings_plugin.listener(hikari.events.InteractionCreateEvent)
 async def on_interaction_create(event: hikari.events.InteractionCreateEvent):
